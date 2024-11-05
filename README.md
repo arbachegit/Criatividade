@@ -9,7 +9,7 @@
             font-family: Arial, sans-serif;
             line-height: 1.6;
             color: #333;
-            max-width: 800px;
+            max-width: 600px;
             margin: 0 auto;
             padding: 20px;
         }
@@ -40,92 +40,77 @@
             margin-top: 20px;
             font-weight: bold;
         }
+        .choice {
+            margin-bottom: 10px;
+        }
+        .correct {
+            color: #22863a;
+        }
+        .incorrect {
+            color: #cb2431;
+        }
     </style>
 </head>
 <body>
     <h1>GitHub Quiz</h1>
     <div id="quiz">
-        <h2 id="question"></h2>
-        <div id="choices"></div>
+        <h2 id="question">What does Git stand for?</h2>
+        <div id="choices">
+            <div class="choice">
+                <input type="radio" id="choice0" name="answer" value="0">
+                <label for="choice0">Global Information Tracker</label>
+            </div>
+            <div class="choice">
+                <input type="radio" id="choice1" name="answer" value="1">
+                <label for="choice1">Global Internet Technology</label>
+            </div>
+            <div class="choice">
+                <input type="radio" id="choice2" name="answer" value="2">
+                <label for="choice2">Graphical Interface Tool</label>
+            </div>
+            <div class="choice">
+                <input type="radio" id="choice3" name="answer" value="3">
+                <label for="choice3">None of the above</label>
+            </div>
+        </div>
         <button id="submit">Submit Answer</button>
     </div>
     <div id="result"></div>
 
     <script>
-        const quizData = [
-            {
-                question: "What does Git stand for?",
-                choices: ["Global Information Tracker", "Gobal Internet Technology", "Graphical Interface Tool", "None of the above"],
-                correctAnswer: 3
-            },
-            {
-                question: "Which command is used to create a new Git repository?",
-                choices: ["git start", "git init", "git new", "git create"],
-                correctAnswer: 1
-            },
-            {
-                question: "What is a 'fork' in GitHub?",
-                choices: ["A bug in the code", "A copy of a repository", "A branch in a repository", "A merge conflict"],
-                correctAnswer: 1
-            }
-        ];
-
-        let currentQuestion = 0;
-        let score = 0;
-
-        const questionEl = document.getElementById("question");
-        const choicesEl = document.getElementById("choices");
+        const correctAnswer = 3;
         const submitBtn = document.getElementById("submit");
-        const quizEl = document.getElementById("quiz");
         const resultEl = document.getElementById("result");
-
-        function loadQuestion() {
-            const question = quizData[currentQuestion];
-            questionEl.textContent = question.question;
-
-            choicesEl.innerHTML = "";
-            for (let i = 0; i < question.choices.length; i++) {
-                const choice = question.choices[i];
-                choicesEl.innerHTML += `
-                    <div>
-                        <input type="radio" id="choice${i}" name="answer" value="${i}">
-                        <label for="choice${i}">${choice}</label>
-                    </div>
-                `;
-            }
-        }
-
-        function getSelected() {
-            const answerEls = document.querySelectorAll("input[name='answer']");
-            for (const answerEl of answerEls) {
-                if (answerEl.checked) {
-                    return parseInt(answerEl.value);
-                }
-            }
-            return undefined;
-        }
+        const choicesEl = document.getElementById("choices");
 
         submitBtn.addEventListener("click", () => {
-            const answer = getSelected();
-            if (answer !== undefined) {
-                if (answer === quizData[currentQuestion].correctAnswer) {
-                    score++;
-                }
+            const selectedAnswer = document.querySelector('input[name="answer"]:checked');
+            if (selectedAnswer) {
+                const answer = parseInt(selectedAnswer.value);
+                const isCorrect = answer === correctAnswer;
+                
+                // Disable all radio buttons
+                document.querySelectorAll('input[name="answer"]').forEach(input => {
+                    input.disabled = true;
+                });
 
-                currentQuestion++;
-                if (currentQuestion < quizData.length) {
-                    loadQuestion();
-                } else {
-                    quizEl.style.display = "none";
-                    resultEl.innerHTML = `
-                        <h2>You finished the quiz!</h2>
-                        <p>Your score: ${score}/${quizData.length}</p>
-                    `;
-                }
+                // Highlight correct and incorrect answers
+                choicesEl.querySelectorAll('.choice').forEach((choice, index) => {
+                    if (index === correctAnswer) {
+                        choice.classList.add('correct');
+                    } else if (index === answer && !isCorrect) {
+                        choice.classList.add('incorrect');
+                    }
+                });
+
+                // Show result
+                resultEl.textContent = isCorrect ? "Correct! " : "Incorrect. ";
+                resultEl.textContent += "Git doesn't actually stand for anything. It's not an acronym, but rather a word that Linus Torvalds chose for its meaning in British slang: 'a stupid person'.";
+                
+                // Disable submit button
+                submitBtn.disabled = true;
             }
         });
-
-        loadQuestion();
     </script>
 </body>
 </html>
