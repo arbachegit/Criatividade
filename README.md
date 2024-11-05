@@ -3,10 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interativo com Robôs</title>
-    <script src="https://unpkg.com/react@17/umd/react.development.js"></script>
-    <script src="https://unpkg.com/react-dom@17/umd/react-dom.development.js"></script>
-    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <title>Quiz Interativo com Robotron e UserRobot</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -112,107 +109,125 @@
                 transform: translateY(-10px);
             }
         }
+        @media (max-width: 480px) {
+            .card {
+                max-width: 100%;
+                border-radius: 0;
+            }
+            .card-content {
+                padding: 10px;
+            }
+            .avatar {
+                width: 40px;
+                height: 40px;
+                font-size: 20px;
+            }
+            .message-content {
+                max-width: calc(100% - 55px);
+            }
+            .option-button {
+                padding: 10px 20px;
+            }
+        }
     </style>
 </head>
 <body>
-    <div id="root"></div>
+    <div id="quiz-container" class="card">
+        <div class="card-content">
+            <!-- Quiz content will be dynamically inserted here -->
+        </div>
+    </div>
 
-    <script type="text/babel">
-        function QuizInterativo() {
-            const [step, setStep] = React.useState(0);
-            const [selectedAnswer, setSelectedAnswer] = React.useState(null);
-            const [isCorrect, setIsCorrect] = React.useState(null);
+    <script>
+        const quizData = {
+            question: "Qual é a capital do Brasil?",
+            options: [
+                { id: 1, text: "Rio de Janeiro" },
+                { id: 2, text: "Brasília" }
+            ],
+            correctAnswer: 2
+        };
 
-            const quizData = {
-                question: "Qual é a capital do Brasil?",
-                options: [
-                    { id: 1, text: "Rio de Janeiro" },
-                    { id: 2, text: "Brasília" }
-                ],
-                correctAnswer: 2
-            };
+        let step = 0;
+        let selectedAnswer = null;
+        let isCorrect = null;
 
-            const handleSelectAnswer = (answerId) => {
-                setSelectedAnswer(answerId);
-                setStep(1);
-                setIsCorrect(answerId === quizData.correctAnswer);
-            };
+        function renderQuiz() {
+            const container = document.querySelector('.card-content');
+            container.innerHTML = '';
 
-            React.useEffect(() => {
-                if (step === 1) {
-                    const timer = setTimeout(() => {
-                        setStep(2);
-                    }, 5000);
-                    return () => clearTimeout(timer);
-                }
-            }, [step]);
+            // Render question
+            container.appendChild(createMessage('Robotron pergunta:', quizData.question, '🤖R', '#3498db'));
 
-            return (
-                <div className="card">
-                    <div className="card-content">
-                        <div className="message">
-                            <div className="avatar" style={{backgroundColor: '#3498db', color: 'white'}}>🤖</div>
-                            <div className="message-content">
-                                <p>{quizData.question}</p>
-                            </div>
-                        </div>
+            if (step === 0) {
+                // Render options
+                const optionsContainer = document.createElement('div');
+                optionsContainer.className = 'options';
+                quizData.options.forEach(option => {
+                    const button = document.createElement('button');
+                    button.className = 'option-button';
+                    button.innerHTML = `
+                        <div class="avatar" style="background-color: #2ecc71; color: white; margin-right: 10px;">🤖U</div>
+                        ${option.text}
+                    `;
+                    button.onclick = () => handleSelectAnswer(option.id);
+                    optionsContainer.appendChild(button);
+                });
+                container.appendChild(optionsContainer);
+            }
 
-                        {step === 0 && (
-                            <div className="options">
-                                {quizData.options.map((option) => (
-                                    <button
-                                        key={option.id}
-                                        className="option-button"
-                                        onClick={() => handleSelectAnswer(option.id)}
-                                    >
-                                        <div className="avatar" style={{backgroundColor: '#2ecc71', color: 'white', marginRight: '10px'}}>🤖</div>
-                                        {option.text}
-                                    </button>
-                                ))}
-                            </div>
-                        )}
+            if (step >= 1 && selectedAnswer) {
+                // Render user answer
+                const selectedOption = quizData.options.find(opt => opt.id === selectedAnswer);
+                container.appendChild(createMessage('UserRobot responde:', selectedOption.text, '🤖U', '#2ecc71', true));
+            }
 
-                        {step >= 1 && selectedAnswer && (
-                            <div className="message user-message">
-                                <div className="avatar" style={{backgroundColor: '#2ecc71', color: 'white'}}>🤖</div>
-                                <div className="message-content">
-                                    <p>{quizData.options.find(opt => opt.id === selectedAnswer)?.text}</p>
-                                </div>
-                            </div>
-                        )}
+            if (step === 1) {
+                // Render loading animation
+                const loading = document.createElement('div');
+                loading.className = 'loading';
+                loading.innerHTML = '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
+                container.appendChild(loading);
+            }
 
-                        {step === 1 && (
-                            <div className="loading">
-                                <div className="loading-dot"></div>
-                                <div className="loading-dot"></div>
-                                <div className="loading-dot"></div>
-                            </div>
-                        )}
-
-                        {step === 2 && (
-                            <div className="message">
-                                <div className="avatar" style={{backgroundColor: isCorrect ? '#2ecc71' : '#e74c3c', color: 'white'}}>
-                                    {isCorrect ? '😃' : '😢'}
-                                </div>
-                                <div className="message-content">
-                                    <p>
-                                        {isCorrect ? 'Parabéns! Você acertou!' : 'Ops! Não foi dessa vez.'}
-                                    </p>
-                                    <p>
-                                        A resposta correta é: <strong>{quizData.options.find(opt => opt.id === quizData.correctAnswer)?.text}</strong>
-                                    </p>
-                                    <p>
-                                        Brasília é a capital do Brasil desde 1960, quando foi inaugurada para substituir o Rio de Janeiro como sede do governo federal.
-                                    </p>
-                                </div>
-                            </div>
-                        )}
-                    </div>
-                </div>
-            );
+            if (step === 2) {
+                // Render final answer
+                const correctOption = quizData.options.find(opt => opt.id === quizData.correctAnswer);
+                const message = `
+                    <p>${isCorrect ? 'Parabéns! UserRobot acertou!' : 'Ops! UserRobot errou dessa vez.'}</p>
+                    <p>A resposta correta é: <strong>${correctOption.text}</strong></p>
+                    <p>Brasília é a capital do Brasil desde 1960, quando foi inaugurada para substituir o Rio de Janeiro como sede do governo federal.</p>
+                `;
+                container.appendChild(createMessage('Robotron responde:', message, '🤖R', isCorrect ? '#2ecc71' : '#e74c3c'));
+            }
         }
 
-        ReactDOM.render(<QuizInterativo />, document.getElementById('root'));
+        function createMessage(title, content, avatar, bgColor, isUser = false) {
+            const messageDiv = document.createElement('div');
+            messageDiv.className = `message${isUser ? ' user-message' : ''}`;
+            messageDiv.innerHTML = `
+                <div class="avatar" style="background-color: ${bgColor}; color: white;">${avatar}</div>
+                <div class="message-content">
+                    <p><strong>${title}</strong></p>
+                    <p>${content}</p>
+                </div>
+            `;
+            return messageDiv;
+        }
+
+        function handleSelectAnswer(answerId) {
+            selectedAnswer = answerId;
+            isCorrect = answerId === quizData.correctAnswer;
+            step = 1;
+            renderQuiz();
+            setTimeout(() => {
+                step = 2;
+                renderQuiz();
+            }, 5000);
+        }
+
+        // Initial render
+        renderQuiz();
     </script>
 </body>
 </html>
