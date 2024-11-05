@@ -1,9 +1,8 @@
-
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quiz Interativo com Robotron e UserRobot</title>
+    <title>Quiz Interativo com Risk</title>
     <style>
         body {
             font-family: Arial, sans-serif;
@@ -157,7 +156,7 @@
             container.innerHTML = '';
 
             // Render question
-            container.appendChild(createMessage('Robotron pergunta:', quizData.question, '🤖R', '#3498db'));
+            container.appendChild(createMessage('Risk pergunta:', quizData.question, '🤖', '#3498db'));
 
             if (step === 0) {
                 // Render options
@@ -167,7 +166,7 @@
                     const button = document.createElement('button');
                     button.className = 'option-button';
                     button.innerHTML = `
-                        <div class="avatar" style="background-color: #2ecc71; color: white; margin-right: 10px;">🤖U</div>
+                        <div class="avatar" style="background-color: #2ecc71; color: white; margin-right: 10px;">🦾</div>
                         ${option.text}
                     `;
                     button.onclick = () => handleSelectAnswer(option.id);
@@ -179,7 +178,7 @@
             if (step >= 1 && selectedAnswer) {
                 // Render user answer
                 const selectedOption = quizData.options.find(opt => opt.id === selectedAnswer);
-                container.appendChild(createMessage('UserRobot responde:', selectedOption.text, '🤖U', '#2ecc71', true));
+                container.appendChild(createMessage('Resposta:', selectedOption.text, '🦾', '#2ecc71', true));
             }
 
             if (step === 1) {
@@ -194,11 +193,11 @@
                 // Render final answer
                 const correctOption = quizData.options.find(opt => opt.id === quizData.correctAnswer);
                 const message = `
-                    <p>${isCorrect ? 'Parabéns! UserRobot acertou!' : 'Ops! UserRobot errou dessa vez.'}</p>
+                    <p>${isCorrect ? 'Parabéns! Você acertou!' : 'Ops! Não foi dessa vez.'}</p>
                     <p>A resposta correta é: <strong>${correctOption.text}</strong></p>
                     <p>Brasília é a capital do Brasil desde 1960, quando foi inaugurada para substituir o Rio de Janeiro como sede do governo federal.</p>
                 `;
-                container.appendChild(createMessage('Robotron responde:', message, '🤖R', isCorrect ? '#2ecc71' : '#e74c3c'));
+                container.appendChild(createMessage('Risk responde:', message, '🤖', isCorrect ? '#2ecc71' : '#e74c3c'));
             }
         }
 
