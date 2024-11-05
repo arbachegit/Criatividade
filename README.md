@@ -145,18 +145,14 @@
             ],
             correctAnswer: 2
         };
-
         let step = 0;
         let selectedAnswer = null;
         let isCorrect = null;
-
         function renderQuiz() {
             const container = document.querySelector('.card-content');
             container.innerHTML = '';
-
             // Render question
             container.appendChild(createMessage('Risk pergunta:', quizData.question, '🤖', '#3498db'));
-
             if (step === 0) {
                 // Render options
                 const optionsContainer = document.createElement('div');
@@ -173,13 +169,11 @@
                 });
                 container.appendChild(optionsContainer);
             }
-
             if (step >= 1 && selectedAnswer) {
                 // Render user answer
                 const selectedOption = quizData.options.find(opt => opt.id === selectedAnswer);
                 container.appendChild(createMessage('Resposta:', selectedOption.text, '😊', '#2ecc71', true));
             }
-
             if (step === 1) {
                 // Render loading animation
                 const loading = document.createElement('div');
@@ -187,7 +181,6 @@
                 loading.innerHTML = '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
                 container.appendChild(loading);
             }
-
             if (step === 2) {
                 // Render final answer
                 const correctOption = quizData.options.find(opt => opt.id === quizData.correctAnswer);
@@ -199,7 +192,6 @@
                 container.appendChild(createMessage('Risk responde:', message, '🤖', isCorrect ? '#2ecc71' : '#e74c3c'));
             }
         }
-
         function createMessage(title, content, avatar, bgColor, isUser = false) {
             const messageDiv = document.createElement('div');
             messageDiv.className = `message${isUser ? ' user-message' : ''}`;
@@ -212,7 +204,6 @@
             `;
             return messageDiv;
         }
-
         function handleSelectAnswer(answerId) {
             selectedAnswer = answerId;
             isCorrect = answerId === quizData.correctAnswer;
@@ -223,7 +214,6 @@
                 renderQuiz();
             }, 5000);
         }
-
         // Initial render
         renderQuiz();
     </script>
