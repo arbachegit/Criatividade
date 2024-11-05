@@ -136,7 +136,6 @@
             <!-- Quiz content will be dynamically inserted here -->
         </div>
     </div>
-
     <script>
         const quizData = {
             question: "Eu posso desenvolver a minha capacidade criativa?",
