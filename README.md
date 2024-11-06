@@ -128,6 +128,11 @@
         .close-button:hover {
             background-color: #45a049;
         }
+        .end-message {
+            text-align: center;
+            font-size: 24px;
+            margin-top: 20px;
+        }
         @media (max-width: 480px) {
             .card {
                 max-width: 100%;
@@ -216,22 +221,16 @@
                     loadingDots.className = 'loading';
                     loadingDots.innerHTML = '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
                     container.appendChild(loadingDots);
-                    // Remove os três pontinhos e adiciona a sugestão de fechar a janela
+                    // Remove os três pontinhos e adiciona a sugestão de encerrar o quiz
                     setTimeout(() => {
                         loadingDots.remove();
-                        const closeMessage = createMessage('Risk sugere:', 'Você gostaria de voltar à página anterior?', '🤖', '#3498db', false);
+                        const closeMessage = createMessage('Risk sugere:', 'Você gostaria de encerrar este quiz?', '🤖', '#3498db', false);
                         container.appendChild(closeMessage);
                         const closeButton = document.createElement('button');
                         closeButton.className = 'close-button';
-                        closeButton.textContent = 'Voltar';
+                        closeButton.textContent = 'Encerrar Quiz';
                         closeButton.onclick = () => {
-                            // Verifica se há uma página anterior no histórico
-                            if (window.history.length > 1) {
-                                window.history.back();
-                            } else {
-                                // Se não houver página anterior, redireciona para uma página padrão
-                                window.location.href = 'https://www.exemplo.com';
-                            }
+                            container.innerHTML = '<div class="end-message">Quiz encerrado. Obrigado por participar!</div>';
                         };
                         container.appendChild(closeButton);
                     }, 2000);
