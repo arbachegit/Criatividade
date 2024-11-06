@@ -111,7 +111,6 @@
                 transform: translateY(-10px);
             }
         }
-        /* Estilo para o botão de fechar */
         .close-button {
             background-color: #4CAF50;
             border: none;
@@ -220,15 +219,21 @@
                     // Remove os três pontinhos e adiciona a sugestão de fechar a janela
                     setTimeout(() => {
                         loadingDots.remove();
-                        // Início do código para fechar a janela
-                        const closeMessage = createMessage('Risk sugere:', 'Você gostaria de fechar esta janela e voltar à página anterior?', '🤖', '#3498db', false);
+                        const closeMessage = createMessage('Risk sugere:', 'Você gostaria de voltar à página anterior?', '🤖', '#3498db', false);
                         container.appendChild(closeMessage);
                         const closeButton = document.createElement('button');
                         closeButton.className = 'close-button';
-                        closeButton.textContent = 'Fechar Janela';
-                        closeButton.onclick = () => window.close();
+                        closeButton.textContent = 'Voltar';
+                        closeButton.onclick = () => {
+                            // Verifica se há uma página anterior no histórico
+                            if (window.history.length > 1) {
+                                window.history.back();
+                            } else {
+                                // Se não houver página anterior, redireciona para uma página padrão
+                                window.location.href = 'https://www.exemplo.com';
+                            }
+                        };
                         container.appendChild(closeButton);
-                        // Fim do código para fechar a janela
                     }, 2000);
                 }, 1000);
             }
