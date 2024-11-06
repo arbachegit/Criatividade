@@ -141,10 +141,10 @@
     </div>
     <script>
         const quizData = {
-            question: "Qual é a capital do Brasil?",
+            question: "Eu posso desenvolver a minha capacidade criativa?",
             options: [
-                { id: 1, text: "Rio de Janeiro" },
-                { id: 2, text: "Brasília" }
+                { id: 1, text: "A criatividade é uma habilidade inata em muitas pessoas, mas é um dom que apenas algumas conseguem desenvolver plenamente e explorar em todo o seu potencial." },
+                { id: 2, text: "A criatividade é resultado do esforço e da persistência. As pessoas não nascem criativas, elas se tornam criativas ao longo de suas jornadas." }
             ],
             correctAnswer: 2
         };
@@ -190,7 +190,7 @@
                 const message = `
                     <p>${isCorrect ? 'Parabéns! Você acertou!' : 'Ops! Não foi dessa vez.'}</p>
                     <p>A resposta correta é: <strong>${correctOption.text}</strong></p>
-                    <p>Brasília é a capital do Brasil desde 1960, quando foi inaugurada para substituir o Rio de Janeiro como sede do governo federal.</p>
+                    <p>A criatividade é impulsionada pela obstinação, um dos comportamentos essenciais para expandir sua capacidade de imaginar e desenvolver ideias. Sem determinação, vontade e propósito, não há evolução nem criação.</p>
                 `;
                 container.appendChild(createMessage('Risk responde:', message, '🤖', '#3498db', false));
             }
