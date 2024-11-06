@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html lang="pt-BR">
 <head>
     <meta charset="UTF-8">
@@ -111,6 +112,24 @@
                 transform: translateY(-10px);
             }
         }
+        /* Estilo para o botão de fechar */
+        .close-button {
+            background-color: #4CAF50;
+            border: none;
+            color: white;
+            padding: 10px 20px;
+            text-align: center;
+            text-decoration: none;
+            display: inline-block;
+            font-size: 16px;
+            margin: 4px 2px;
+            cursor: pointer;
+            border-radius: 4px;
+            transition: background-color 0.3s;
+        }
+        .close-button:hover {
+            background-color: #45a049;
+        }
         @media (max-width: 480px) {
             .card {
                 max-width: 100%;
@@ -193,6 +212,26 @@
                     <p>A criatividade é impulsionada pela obstinação, um dos comportamentos essenciais para expandir sua capacidade de imaginar e desenvolver ideias. Sem determinação, vontade e propósito, não há evolução nem criação.</p>
                 `;
                 container.appendChild(createMessage('Risk responde:', message, '🤖', '#3498db', false));
+                // Adiciona os três pontinhos após a resposta do Risk
+                setTimeout(() => {
+                    const loadingDots = document.createElement('div');
+                    loadingDots.className = 'loading';
+                    loadingDots.innerHTML = '<div class="loading-dot"></div><div class="loading-dot"></div><div class="loading-dot"></div>';
+                    container.appendChild(loadingDots);
+                    // Remove os três pontinhos e adiciona a sugestão de fechar a janela
+                    setTimeout(() => {
+                        loadingDots.remove();
+                        // Início do código para fechar a janela
+                        const closeMessage = createMessage('Risk sugere:', 'Você gostaria de fechar esta janela e voltar à página anterior?', '🤖', '#3498db', false);
+                        container.appendChild(closeMessage);
+                        const closeButton = document.createElement('button');
+                        closeButton.className = 'close-button';
+                        closeButton.textContent = 'Fechar Janela';
+                        closeButton.onclick = () => window.close();
+                        container.appendChild(closeButton);
+                        // Fim do código para fechar a janela
+                    }, 2000);
+                }, 1000);
             }
         }
         function createMessage(title, content, avatar, avatarBgColor, isUser) {
