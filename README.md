@@ -230,7 +230,7 @@
                         closeButton.className = 'close-button';
                         closeButton.textContent = 'Tchau!!!✌🎉✌️';
                         closeButton.onclick = () => {
-                            container.innerHTML = '<div class="end-message">Quiz encerrado. Obrigado por participar!</div>';                        };
+                            container.innerHTML = '<div class="end-message">Vamos voltar a estudar? 😬 Então volte para a página anterior...🫡 </div>'; };
                         container.appendChild(closeButton);
                     }, 2000);
                 }, 1000);
