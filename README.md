@@ -228,9 +228,9 @@
                         container.appendChild(closeMessage);
                         const closeButton = document.createElement('button');
                         closeButton.className = 'close-button';
-                        closeButton.textContent = 'Encerrar Quiz';
+                        closeButton.textContent = 'Tchau!!!✌🎉✌️';
                         closeButton.onclick = () => {
-                            container.innerHTML = '<div class="end-message">Quiz encerrado. Obrigado por participar!</div>';
+                            container.innerHTML = '<div class="end-message">createMessage('Risk sugere:', 'Vamos voltar a estudar?', '🤖', '#3498db', false);</div>';
                         };
                         container.appendChild(closeButton);
                     }, 2000);
