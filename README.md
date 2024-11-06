@@ -29,33 +29,35 @@
             display: flex;
             align-items: flex-start;
             margin-bottom: 20px;
+            position: relative;
         }
         .avatar {
             width: 50px;
             height: 50px;
             border-radius: 50%;
-            margin-right: 15px;
             display: flex;
             justify-content: center;
             align-items: center;
             font-size: 24px;
             flex-shrink: 0;
+            z-index: 2;
         }
         .message-content {
-            background-color: #e5e5e5;
             border-radius: 18px;
             padding: 10px 15px;
-            max-width: calc(100% - 65px);
+            max-width: calc(100% - 130px);
+            margin: 0 15px;
+        }
+        .risk-message .message-content {
+            background-color: #006400; /* Verde escuro */
+            color: white;
         }
         .user-message {
             flex-direction: row-reverse;
         }
-        .user-message .avatar {
-            margin-right: 0;
-            margin-left: 15px;
-        }
         .user-message .message-content {
-            background-color: #dcf8c6;
+            background-color: #00008B; /* Azul escuro */
+            color: white;
         }
         .options {
             display: flex;
@@ -63,7 +65,7 @@
             gap: 10px;
         }
         .option-button {
-            background-color: #4CAF50;
+            background-color: #00008B; /* Azul escuro */
             border: none;
             color: white;
             padding: 15px 32px;
@@ -71,13 +73,14 @@
             text-decoration: none;
             display: flex;
             align-items: center;
+            justify-content: space-between;
             font-size: 16px;
             cursor: pointer;
             border-radius: 8px;
             transition: background-color 0.3s;
         }
         .option-button:hover {
-            background-color: #45a049;
+            background-color: #0000CD; /* Azul médio */
         }
         .option-button:disabled {
             background-color: #cccccc;
@@ -122,7 +125,7 @@
                 font-size: 20px;
             }
             .message-content {
-                max-width: calc(100% - 55px);
+                max-width: calc(100% - 110px);
             }
             .option-button {
                 padding: 10px 20px;
@@ -138,10 +141,10 @@
     </div>
     <script>
         const quizData = {
-            question: "Eu posso desenvolver a minha capacidade criativa?",
+            question: "Qual é a capital do Brasil?",
             options: [
-                { id: 1, text: “A criatividade é uma habilidade inata em muitas pessoas, mas é um dom que apenas algumas conseguem desenvolver plenamente e explorar em todo o seu potencial.”},
-                { id: 2, text: "A criatividade é resultado do esforço e da persistência. As pessoas não nascem criativas, elas se tornam criativas ao longo de suas jornadas." }
+                { id: 1, text: "Rio de Janeiro" },
+                { id: 2, text: "Brasília" }
             ],
             correctAnswer: 2
         };
@@ -152,7 +155,7 @@
             const container = document.querySelector('.card-content');
             container.innerHTML = '';
             // Render question
-            container.appendChild(createMessage('Risk pergunta:', quizData.question, '🤖', '#3498db'));
+            container.appendChild(createMessage('Risk pergunta:', quizData.question, '🤖', '#3498db', false));
             if (step === 0) {
                 // Render options
                 const optionsContainer = document.createElement('div');
@@ -161,8 +164,8 @@
                     const button = document.createElement('button');
                     button.className = 'option-button';
                     button.innerHTML = `
-                        <div class="avatar" style="background-color: #2ecc71; color: white; margin-right: 10px;">😊</div>
-                        ${option.text}
+                        <span>${option.text}</span>
+                        <span class="avatar" style="background-color: #2ecc71; color: white;">😊</span>
                     `;
                     button.onclick = () => handleSelectAnswer(option.id);
                     optionsContainer.appendChild(button);
@@ -187,20 +190,21 @@
                 const message = `
                     <p>${isCorrect ? 'Parabéns! Você acertou!' : 'Ops! Não foi dessa vez.'}</p>
                     <p>A resposta correta é: <strong>${correctOption.text}</strong></p>
-                    <p>A criatividade é impulsionada pela obstinação, um dos comportamentos essenciais para expandir sua capacidade de imaginar e desenvolver ideias. Sem determinação, vontade e propósito, não há evolução nem criação.</p>
+                    <p>Brasília é a capital do Brasil desde 1960, quando foi inaugurada para substituir o Rio de Janeiro como sede do governo federal.</p>
                 `;
-                container.appendChild(createMessage('Risk responde:', message, '🤖', isCorrect ? '#2ecc71' : '#e74c3c'));
+                container.appendChild(createMessage('Risk responde:', message, '🤖', '#3498db', false));
             }
         }
-        function createMessage(title, content, avatar, bgColor, isUser = false) {
+        function createMessage(title, content, avatar, avatarBgColor, isUser) {
             const messageDiv = document.createElement('div');
-            messageDiv.className = `message${isUser ? ' user-message' : ''}`;
+            messageDiv.className = `message ${isUser ? 'user-message' : 'risk-message'}`;
             messageDiv.innerHTML = `
-                <div class="avatar" style="background-color: ${bgColor}; color: white;">${avatar}</div>
+                ${isUser ? '' : `<div class="avatar" style="background-color: ${avatarBgColor}; color: white;">${avatar}</div>`}
                 <div class="message-content">
                     <p><strong>${title}</strong></p>
                     <p>${content}</p>
                 </div>
+                ${isUser ? `<div class="avatar" style="background-color: ${avatarBgColor}; color: white;">${avatar}</div>` : ''}
             `;
             return messageDiv;
         }
